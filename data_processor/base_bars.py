@@ -1,5 +1,6 @@
 import pandas as pd 
-import numpy as np 
+import numpy as np
+import os
 
 class BaseBars:
     def __init__(self, file_path, output_path, method, threshold, batch_size=20000000):
@@ -28,6 +29,8 @@ class BaseBars:
             full_bars.columns = cols
             #print(type(list_bars[2][3]))
             #list_bars.columns = cols
+            if os.path.exists(self.output_path):
+                os.remove(self.output_path)
             full_bars.to_csv(self.output_path, header=header, index=False, mode='a')
             header = False
 

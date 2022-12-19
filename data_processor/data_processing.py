@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 
 class DataProcessing:
@@ -93,6 +94,9 @@ class DataProcessing:
         print(train_x.shape)
 
         if save_csv:
+            # Check parent folder existance
+            if not os.path.exists(f'data/processed_data/{csv_path}'):
+                os.makedirs(f'data/processed_data/{csv_path}')
             train_x.to_csv(f'data/processed_data/{csv_path}/train_x.csv')
             train_y.to_csv(f'data/processed_data/{csv_path}/train_y.csv', header=['y_values'])
             test_x.to_csv(f'data/processed_data/{csv_path}/test_x.csv')
