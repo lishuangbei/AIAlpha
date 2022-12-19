@@ -95,14 +95,14 @@ class DataProcessing:
 
         if save_csv:
             # Check parent folder existance
-            if not os.path.exists(f'data/processed_data/{csv_path}'):
-                os.makedirs(f'data/processed_data/{csv_path}')
-            train_x.to_csv(f'data/processed_data/{csv_path}/train_x.csv')
-            train_y.to_csv(f'data/processed_data/{csv_path}/train_y.csv', header=['y_values'])
-            test_x.to_csv(f'data/processed_data/{csv_path}/test_x.csv')
-            test_y.to_csv(f'data/processed_data/{csv_path}/test_y.csv', header=['y_values'])
-            fulldata.to_csv(f'data/processed_data/{csv_path}/full_x.csv')
-            y_values.to_csv(f'data/processed_data/{csv_path}/full_y.csv', header=['y_values'])
+            if not os.path.exists(f'{csv_path}'):
+                os.makedirs(f'{csv_path}')
+            train_x.to_csv(f'{csv_path}/train_x.csv')
+            train_y.to_csv(f'{csv_path}/train_y.csv', header=['y_values'])
+            test_x.to_csv(f'{csv_path}/test_x.csv')
+            test_y.to_csv(f'{csv_path}/test_y.csv', header=['y_values'])
+            fulldata.to_csv(f'{csv_path}/full_x.csv')
+            y_values.to_csv(f'{csv_path}/full_y.csv', header=['y_values'])
         return fulldata, y_values, train_x, train_y, test_x, test_y
     
     def check_labels(self, y_values):
