@@ -49,14 +49,27 @@ class AutoEncoder:
         
     def encode_data(self, data, csv_path, save_csv=True):
         coded_train = []
-        for i in range(len(data)):
-            curr_data = np.array(data.iloc[i, :])
-            values = np.reshape(curr_data, (1, 1, self.input_shape))
+        using_for_loop = 0
+        num_of_samples = len(data)
+        if using_for_loop:
+            # For me using for-loop takes hours and eats up all the memory. Keras doesn't recommend this as well.
+            for i in range(len(data)): # data.shape = (192xxx, 184)
+                curr_data = np.array(data.iloc[i, :]) # pick one sample, shape is (1, 184)
+                values = np.reshape(curr_data, (1, 1, self.input_shape)) # shape is (1, 1, 184)
+                coded = self.encoder.predict(values) # shape is (1, 1, 20)
+                # can above 'predict()' process massive data instead of 1 row at a time?
+                shaped = np.reshape(coded, (20,)) #shape is (20, )
+                coded_train.append(shaped) #
+                print(i)
+            train_coded = pd.DataFrame(coded_train, index=np.arange(len(coded_train)), columns=np.arange(20))
+        else:
+            # The 'predict()' step takes some time. For people who're using VS Code, set "PYDEVD_WARN_EVALUATION_TIMEOUT" to a large number in lauch.json.
+            curr_data = np.array(data)
+            values = np.reshape(curr_data, (num_of_samples, 1, self.input_shape)) # not sure which shape is correct, (num, 1, 184) or (num, 184).
             coded = self.encoder.predict(values)
-            shaped = np.reshape(coded, (20,))
-            coded_train.append(shaped)
+            shaped = np.reshape(coded, (num_of_samples, 20))
+            train_coded = pd.DataFrame(shaped, index=np.arange(len(shaped)), columns=np.arange(20))
 
-        train_coded = pd.DataFrame(coded_train, index=np.arange(len(coded_train)), columns=np.arange(20))
         if save_csv:
             train_coded.to_csv(f"{csv_path}")
         return train_coded
